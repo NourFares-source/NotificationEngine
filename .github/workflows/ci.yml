@@ -53,13 +53,29 @@ jobs:
 
       - name: Run Alembic migrations
         env:
-          DATABASE_URL: postgresql+asyncpg://postgres:postgrespassword@localhost:5432/notification_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
+          POSTGRES_DB: notification_db
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          DATABASE_URL: postgresql+asyncpg://postgres:${{ secrets.TEST_DB_PASSWORD }}@localhost:5432/notification_db
+          REDIS_URL: redis://localhost:6379
+          PYTHONPATH: .
         run: |
           alembic upgrade head
 
       - name: Execute test suite
         env:
-          DATABASE_URL: postgresql+asyncpg://postgres:postgrespassword@localhost:5432/notification_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
+          POSTGRES_DB: notification_db
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          DATABASE_URL: postgresql+asyncpg://postgres:${{ secrets.TEST_DB_PASSWORD }}@localhost:5432/notification_db
           REDIS_URL: redis://localhost:6379
           PYTHONPATH: .
         run: |
